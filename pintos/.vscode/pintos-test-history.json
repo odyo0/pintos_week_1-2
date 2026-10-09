@@ -1,0 +1,149 @@
+{
+  "userprog": {
+    "tests/userprog/create-normal": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/create-empty": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/create-null": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/create-bad-ptr": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/create-long": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/create-exists": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/create-bound": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/open-normal": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/open-missing": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/open-boundary": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/open-empty": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/open-null": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/open-bad-ptr": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/open-twice": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/close-normal": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/close-twice": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/close-bad-fd": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/read-normal": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/read-bad-ptr": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/read-boundary": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/read-zero": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/read-stdout": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/read-bad-fd": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/write-normal": {
+      "count": 5,
+      "last_used": 1778045337.111,
+      "last_action": "debug"
+    },
+    "tests/userprog/write-bad-ptr": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/write-boundary": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/write-zero": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/write-stdin": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    },
+    "tests/userprog/write-bad-fd": {
+      "count": 4,
+      "last_used": 1778045134.717,
+      "last_action": "run"
+    }
+  }
+}

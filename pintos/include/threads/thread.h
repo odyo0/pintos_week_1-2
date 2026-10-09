@@ -5,9 +5,18 @@
 #include <list.h>
 #include <stdint.h>
 #include "threads/interrupt.h"
+#include "threads/synch.h"
 #ifdef VM
 #include "vm/vm.h"
 #endif
+
+/* [Phase 0] 파일 디스크립터 테이블 한도.
+ * fd 0/1은 stdin/stdout 예약, 실제 파일은 fd 2부터 사용한다.
+ * 테이블은 palloc 1페이지(PGSIZE)에 저장되므로 PGSIZE/sizeof(void*) = 512 한도 안에서 변경 가능.
+ * 우선 128로 두고, C/D 담당이 필요하면 늘리도록 합의. */
+#define FDT_LIMIT 128
+
+struct file;
 
 
 /* States in a thread's life cycle. */
@@ -99,7 +108,51 @@ struct thread {
 #ifdef USERPROG
 	/* Owned by userprog/process.c. */
 	uint64_t *pml4;                    /* Page map level 4 */
+
+	/* [Phase 0] 종료 상태.
+	 * 정상 exit() 호출 시 sys_exit이 덮어 쓴다.
+	 * 비정상 종료(page fault, kill, bad pointer)는 -1을 그대로 보고. */
 	int exit_status;
+
+	/* [Phase 0] 파일 디스크립터 테이블.
+	 * - fd_table: palloc 1페이지(PAL_ZERO)로 할당, 종료 시 해제 (process.c)
+	 * - next_fd: 다음에 후보로 검사할 fd 인덱스 (선형 탐색 시작점, hint 역할)
+	 * - C 담당이 add/get/remove/copy/close_all API를 마무리한다. */
+	struct file **fd_table;
+	int next_fd;
+
+	/* [Phase 0] 실행 중 자기 실행 파일 (rox 차단용).
+	 * load() 시점에 file_deny_write 호출, process_exit에서 file_allow_write + close.
+	 * A 담당(exec) + B 담당(rox) 협업. */
+	struct file *running_file;
+
+	/* [Phase 0] 부모-자식 관계.
+	 * - parent: 부모 스레드 포인터 (initial thread는 NULL)
+	 * - children: 내가 만든 자식 스레드들 (struct thread::child_elem 노드 모음)
+	 * - child_elem: 부모의 children 리스트에 들어가는 링크
+	 * - 자식은 부모가 reap 하기 전까지 살아 있어야 하므로 exit_sema로 차단된다. */
+	struct thread *parent;
+	struct list children;
+	struct list_elem child_elem;
+
+	/* [Phase 0] 라이프사이클 동기화 (B 담당이 의미를 채운다).
+	 * - fork_sema: 부모는 fork()에서 down. 자식은 __do_fork 끝에서 up.
+	 * - fork_success: 자식의 load/복제 결과를 부모에게 전달.
+	 * - wait_sema: 부모는 wait()에서 down. 자식은 process_exit 직전 up.
+	 * - exit_sema: 자식은 wait_sema up 직후 down하여 부모의 reap을 기다린다.
+	 *              부모는 exit_status 읽은 뒤 up하여 자식이 진짜 dying에 들어가게 한다.
+	 * - exited / waited: 중복 wait 방지 및 상태 추적. */
+	struct semaphore fork_sema;
+	bool fork_success;
+	struct semaphore wait_sema;
+	struct semaphore exit_sema;
+	bool exited;
+	bool waited;
+
+	/* [Phase 0] fork 시 부모 인터럽트 프레임 스냅샷.
+	 * process_fork()에서 syscall_handler의 if_를 복사해 두고 __do_fork가 사용한다.
+	 * B 담당이 활용. */
+	struct intr_frame parent_if;
 #endif
 #ifdef VM
 	/* Table for whole virtual memory owned by thread. */

@@ -442,6 +442,25 @@ init_thread (struct thread *t, const char *name, int priority) {
 	t->tf.rsp = (uint64_t) t + PGSIZE - sizeof (void *);
 	t->priority = priority;
 	t->magic = THREAD_MAGIC;
+
+#ifdef USERPROG
+	/* [Phase 0] 사용자 프로세스 라이프사이클 필드 기본값.
+	 * - exit_status는 -1로 둬야 비정상 종료(page fault 등) 시 "exit(-1)"이 출력된다.
+	 * - fd_table은 process_exec/process_fork에서 palloc로 만들고, process_exit에서 해제.
+	 * - 부모 포인터는 thread_create 시점에 호출자가 설정 (process.c). */
+	t->exit_status = -1;
+	t->fd_table = NULL;
+	t->next_fd = 2;
+	t->running_file = NULL;
+	t->parent = NULL;
+	list_init (&t->children);
+	sema_init (&t->fork_sema, 0);
+	t->fork_success = false;
+	sema_init (&t->wait_sema, 0);
+	sema_init (&t->exit_sema, 0);
+	t->exited = false;
+	t->waited = false;
+#endif
 }
 
 /* 다음에 스케줄할 스레드를 선택해 반환한다. 실행 큐가 비어 있지 않다면
